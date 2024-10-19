@@ -1,11 +1,4 @@
 /* src/components/Home.css */
-.header {
-    background-color: #003366; /* Dark Blue */
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
-
 .app-container {
     text-align: center;
     padding: 20px;

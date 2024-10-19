@@ -1,5 +1,6 @@
 // src/components/Register.jsx
 import React, { useState } from 'react';
+import './Login.css';
 
 const Register = ({onLoginClick}) => {
     const [email, setEmail] = useState('');
@@ -8,18 +9,19 @@ const Register = ({onLoginClick}) => {
     const handleRegister = () => {
         // Handle register logic here
         console.log('Register:', email, password);
+        onLoginClick();
     };
 
     return (
         <div className='register-container'>
-            <h2>Register</h2>
+            <h2>Crea una cuenta</h2>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-            <button onClick={handleRegister}>Register</button>
+            <button onClick={handleRegister}>Registrarse</button>
             <p>
-                Already have an account?{' '}
+                ¿Ya tienes una cuenta?{' '}
                 <a href="#" onClick={(e) => { e.preventDefault(); onLoginClick(); }}>
-                    Login here
+                    Inicia sesión aquí.
                 </a>
             </p>
         </div>

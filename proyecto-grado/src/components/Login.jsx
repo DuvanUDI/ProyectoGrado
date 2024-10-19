@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import './Login.css';
 
-const Login = ({onRegisterClick}) => {
+const Login = ({onLogin, onRegisterClick}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
         // Handle login logic here
         console.log('Login:', email, password);
+        onLogin();
     };
 
     return (
@@ -18,9 +19,9 @@ const Login = ({onRegisterClick}) => {
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
             <button onClick={handleLogin}>Iniciar sesión</button>
             <p>
-                Don't have an account?{' '}
+                ¿Aún no tienes una cuenta?{' '}
                 <a href="#" onClick={(e) => { e.preventDefault(); onRegisterClick(); }}>
-                    Register here
+                    Regístrate aquí.
                 </a>
             </p>
         </div>

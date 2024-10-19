@@ -9,7 +9,8 @@ export function App () {
   return (
         <>
             <header className='header'>
-                <h1>Universidad de Investigación y Desarrollo - UDI</h1>
+                <img src='https://web.udi.edu.co/files/img/logo-udi-web.png' alt='UDI' />
+                <h1></h1>
             </header>
 
             <body className='app-container'>

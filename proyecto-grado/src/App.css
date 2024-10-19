@@ -1,8 +1,11 @@
 /* src/App.css */
 .header {
-    background-color: #003366; /* Dark Blue */
-    color: white;
+    background-color: #ffffff; /* Dark Blue */
+    color: rgb(0, 0, 0);
     padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .header h1 {

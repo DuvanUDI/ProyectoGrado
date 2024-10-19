@@ -14,17 +14,3 @@
     border-radius: 5px;
     width: calc(100% - 40px);
 }
-
-.login-container button {
-    background-color: #ff6600; /* Orange */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.login-container button:hover {
-    background-color: #cc5200; /* Darker Orange */
-}
