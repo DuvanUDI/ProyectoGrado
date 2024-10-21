@@ -14,6 +14,7 @@ const UserLandingPage = ({onLogout}) => {
     const itemsPerPage = 10;
     const menuRef = useRef(null);
 
+    // Test data
     const items = [
         { id: 1, title: 'Item 1', description: 'Description for item 1' },
         { id: 2, title: 'Item 2', description: 'Description for item 2' },

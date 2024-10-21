@@ -42,7 +42,7 @@ button:hover {
     background-color: #cc5200; /* Darker Orange */
 }
 
-input[type="email"], input[type="password"] {
+input[type="email"], input[type="password"], input[type="text"] {
     padding: 10px;
     margin: 10px;
     border: 1px solid #ccc;
