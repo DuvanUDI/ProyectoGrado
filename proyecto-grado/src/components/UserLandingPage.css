@@ -53,6 +53,24 @@
     background-color: #0056b3; /* Darker Blue */
 }
 
+.upload-button {
+    background-color: #ff6600; /* Orange */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.upload-button:hover {
+    background-color: #cc5200; /* Darker Orange */
+}
+
 .logout-button {
     background-color: #dc3545; /* Red */
     color: white;
@@ -105,7 +123,7 @@
 }
 
 .item-download-button{
-    background-color: #0056b3; /* Green */
+    background-color: #0056b3; /* Blue */
     color: white;
     border: none;
     padding: 10px;
@@ -116,6 +134,11 @@
     align-items: center;
     gap: 5px;
     max-width: 32px;
+    transition: 0.4s;
+}
+
+.item-download-button:hover {
+    background-color: #ff6600; /* Orange */
 }
 
 .item-description {
