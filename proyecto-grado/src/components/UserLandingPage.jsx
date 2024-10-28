@@ -7,22 +7,26 @@ import UserProfile from './UserProfile';
 import Modal from './Modal';
 import Comments from './Comments';
 import './UserLandingPage.css';
+import UploadForm from './UploadForm';
 
-const UserLandingPage = ({onLogout, user}) => {
+const UserLandingPage = ({onLogout}) => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [uploadFormOpen, setUploadFormOpen] = useState(false);
     const [items, setItems] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [comments, setComments] = useState({});
     const [showComments, setShowComments] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [showProfile, setShowProfile] = useState(false);
+    const [showUploadForm, setShowUploadForm] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
 
     const itemsPerPage = 10;
     const menuRef = useRef(null);
     
         
-    const filteredItems = items.filter(item => 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredItems = items?.filter(item => 
+        item.filename.toLowerCase().includes(searchQuery.toLowerCase())
     );
         
     const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
@@ -30,6 +34,31 @@ const UserLandingPage = ({onLogout, user}) => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                const response = await fetch('http://localhost:5000/users/me', {
+                    headers: {
+                        'Authorization': token,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch current user');
+                }
+
+                const data = await response.json();
+                setCurrentUser(data);
+            } catch (error) {
+                console.error('Error fetching current user:', error);
+            }
+        };
+
+        fetchCurrentUser();
+    }, []);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -43,13 +72,14 @@ const UserLandingPage = ({onLogout, user}) => {
         }
     };
 
-    const handleFileUpload = async (event) => {
-        const file = event.target.files[0];
+    const handleFileUpload = async (file, description) => {
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('description', 'Description for ' + file.name);
-
+            formData.append('fileid', file._id);
+            formData.append('description', description);
+            formData.append('userid', currentUser.userId);
+            try {
             const response = await fetch('http://localhost:5000/models/upload', {
                 method: 'POST',
                 body: formData
@@ -65,13 +95,18 @@ const UserLandingPage = ({onLogout, user}) => {
                     ...prevItems,
                     {
                         id: data._id,
-                        title: data.originalname,
+                        filename: data.originalname,
                         description: data.description,
-                        timestamp: new Date().toLocaleString(),
                         fileUrl: 'http://localhost:5000/uploads/' + data.filename,
                     }
                 ]);
-                setMenuOpen(false);
+                console.log(currentUser.userId);
+                setShowUploadForm(false);
+            } catch (error) {
+                console.error('Error uploading file:', error);
+            }
+        } else {
+            console.error('No file selected');
         }
     };
 
@@ -95,33 +130,33 @@ const UserLandingPage = ({onLogout, user}) => {
     };
 
     const fetchFiles = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/models');
-        if (!response.ok) {
-          console.error('Error fetching files:', response.statusText);
-          return;
+        try {
+            const response = await fetch(`http://localhost:5000/models/library`);
+            if (!response.ok) {
+            console.error('Error fetching files:', response.statusText);
+            return;
+            }
+            const data = await response.json();
+            setItems(data.map(file => ({
+                id: file._id,
+                filename: file.originalname,
+                description: file.description,
+                fileUrl: 'http://localhost:5000/uploads/' + file.filename,
+            })));
+        } catch (error) {
+                console.error('Error fetching files:', error);
         }
-        const data = await response.json();
-        setItems(data.map(file => ({
-            id: file._id,
-            title: file.originalname,
-            description: file.description,
-            fileUrl: 'http://localhost:5000/uploads/' + file.filename,
-        })));
-      }  
-      catch (error) {
-        console.error('Error fetching files:', error);
-      }
     };
 
     useEffect(() => {
-        fetchFiles();
+            fetchFiles();
     }, []);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
                 setMenuOpen(false);
+                setUploadFormOpen(false);
             }
         };
 
@@ -132,20 +167,13 @@ const UserLandingPage = ({onLogout, user}) => {
     return (
         <div className="user-landing-page">
             <header className="header">
-                <h2>Bienvenido {user ? user.name + ' ' + user.lastName : 'Invitado'}</h2>
+                <h2>Bienvenido {currentUser ? currentUser.name + ' ' + currentUser.lastName : 'Invitado'}</h2>
+                <button className="upload-button" onClick={() => setShowUploadForm(true)}>Subir modelo</button>
                 <div className='burger-menu' ref={menuRef}>
                     <FaBars onClick={() => setMenuOpen(!menuOpen)} />
                     {menuOpen && (
                         <div className='menu-content'>
                             <button className='menu-content-item profile-button' onClick={() => setShowProfile(true)}>Mi cuenta</button>
-                            <input 
-                                type="file"
-                                accept=".stl,.obj,.fbx"
-                                style={{ display: 'none' }}
-                                id="file-upload"
-                                onChange={handleFileUpload}
-                            />
-                            <label htmlFor="file-upload" className='menu-content-item upload-button'>Subir modelo 3D</label>
                             <button onClick={onLogout} className='menu-content-item logout-button'>Cerrar sesión</button>
                         </div>
                     )}
@@ -162,7 +190,7 @@ const UserLandingPage = ({onLogout, user}) => {
             <div className="library">
                 {items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(item => (
                     <div key={item.id} className="library-item">
-                        <h3 className="item-header">{item.title}</h3>
+                        <h3 className="item-header">{item.filename}</h3>
                         <p className="item-description">{item.description}</p>
                         <button onClick={() => setShowComments(item.id)}>
                             Ver comentarios
@@ -185,7 +213,8 @@ const UserLandingPage = ({onLogout, user}) => {
                     Siguiente
                 </button>
             </div>
-            {showProfile && <UserProfile user={userInfo} onClose={() => setShowProfile(false)} />}
+            {showUploadForm && <UploadForm onUploadSuccess={handleFileUpload} />}
+            {showProfile && <UserProfile user={currentUser} onClose={() => setShowProfile(false)} />}
         </div>
     );
 };

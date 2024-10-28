@@ -11,7 +11,7 @@ const UserProfile = ({ user, onClose }) => {
                 <p><strong>Email:</strong> {user.email}</p>
                 <p><strong>Role:</strong> {user.role}</p>
                 <p><strong>Group:</strong> {user.group}</p>
-                <button onClick={onClose}>Close</button>
+                <button onClick={onClose}>Cerrar</button>
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 // src/components/Home.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
@@ -33,7 +33,7 @@ const Home = () => {
                     <div>
                         {currentComponent === 'login' && <Login onLogin={handleLogin} onRegisterClick={handleRegisterClick} />}
                         {currentComponent === 'register' && <Register onLoginClick={handleLoginClick} />}
-                        {currentComponent === 'userLandingPage' && <UserLandingPage user={user} onLogout={handleLoginClick}/>}
+                        {currentComponent === 'userLandingPage' && <UserLandingPage onLogout={handleLoginClick}/>}
                     </div>
                 </div>
             </>

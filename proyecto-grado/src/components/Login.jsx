@@ -25,9 +25,8 @@ const Login = ({onLogin, onRegisterClick}) => {
             onLogin(data.user);
         } catch (error) {
             console.error('Error logging in:', error);
-            setError('Server error: ' + error.message);
+            setError('Error al iniciar sesión. Por favor, inténtelo de nuevo.');
         }
-        onLogin();
     };
 
     return (
@@ -35,8 +34,14 @@ const Login = ({onLogin, onRegisterClick}) => {
             <form onSubmit={handleLogin}>
                 <h2>Iniciar sesión</h2>
                 {error && <p className='error'>{error}</p>}
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required/>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required/>
+                <input type="email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    placeholder="Email" required/>
+                <input type="password" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        placeholder="Password" required/>
                 <button type='submit' >Iniciar sesión</button>
             </form>
                 <p>

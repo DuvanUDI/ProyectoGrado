@@ -14,3 +14,9 @@
     border-radius: 5px;
     width: calc(100% - 40px);
 }
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin: 10px;
+}

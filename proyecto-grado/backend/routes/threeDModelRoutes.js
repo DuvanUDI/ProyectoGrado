@@ -19,11 +19,11 @@ const upload = multer({ storage });
 // Create a new 3D model
 router.post('/upload', upload.single('file'), async (req, res) => {
     try {
-        const { description } = req.body;
         const threeDModel = new ThreeDModel({
             filename: req.file.filename,
             originalname: req.file.originalname,
-            description,
+            userid: req.body.userid,
+            description: req.body.description,
         });
         await threeDModel.save();
         res.status(201).json(threeDModel);
@@ -33,13 +33,24 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     }
 });
 
-// Get all 3D models
-router.put('/', async (req, res) => {
+// Get a 3D model by user id
+router.get('/users/:id', async (req, res) => {
     try {
-        const threeDModels = await ThreeDModel.find().populate('filename');
-        res.json(threeDModels);
+        const models = await ThreeDModel.find({ userid: req.params.id });
+        res.json(models);
     } catch (error) {
-        console.error('Error fetching all 3D models:', error);
+        console.error('Error fetching models:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Get all 3D models
+router.get('/library', async (req, res) => {
+    try {
+        const models = await ThreeDModel.find();
+        res.json(models);
+    } catch (error) {
+        console.error('Error fetching models:', error);
         res.status(500).send('Server error');
     }
 });
