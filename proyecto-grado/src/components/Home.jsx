@@ -7,9 +7,11 @@ import UserLandingPage from './UserLandingPage';
 import './Home.css';
 
 const Home = () => {
-    const [showRegister, setShowRegister] = useState(false);
     const [currentComponent, setCurrentComponent] = useState('login');
-    const handleLogin = () => {
+    const [user, setUser] = useState(null);
+
+    const handleLogin = (loggedInUser) => {
+        setUser(loggedInUser);
         setCurrentComponent('userLandingPage');
     };
 
@@ -31,7 +33,7 @@ const Home = () => {
                     <div>
                         {currentComponent === 'login' && <Login onLogin={handleLogin} onRegisterClick={handleRegisterClick} />}
                         {currentComponent === 'register' && <Register onLoginClick={handleLoginClick} />}
-                        {currentComponent === 'userLandingPage' && <UserLandingPage onLogout={handleLoginClick}/>}
+                        {currentComponent === 'userLandingPage' && <UserLandingPage user={user} onLogout={handleLoginClick}/>}
                     </div>
                 </div>
             </>
