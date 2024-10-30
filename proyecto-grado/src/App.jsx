@@ -8,7 +8,7 @@ export function App () {
         <>
             <header className='header'>
                 <img src='https://web.udi.edu.co/files/img/logo-udi-web.png' alt='UDI' />
-                <h1></h1>
+                <h1>AR-Hub</h1>
             </header>
 
             <body className='app-container'>
@@ -17,7 +17,7 @@ export function App () {
                 </div>
             </body>
             <footer className='footer'>
-                <p>Proyecto de Grado - UDI</p>
+                <p>Proyecto de Grado - UDI | 2024</p>
             </footer>
         </>
   );
