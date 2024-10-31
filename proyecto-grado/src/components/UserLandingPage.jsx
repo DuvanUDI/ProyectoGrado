@@ -148,6 +148,14 @@ const UserLandingPage = ({onLogout}) => {
         }
     };
 
+    const handleDownload = (fileUrl) => {
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.download = fileUrl.split('/').pop();
+        link.click(); 
+        document.body.removeChild(link);
+    };
+
     useEffect(() => {
             fetchFiles();
     }, []);
@@ -198,9 +206,10 @@ const UserLandingPage = ({onLogout}) => {
                         <Modal isOpen={showComments === item.id} onClose={() => setShowComments(null)}>
                             <Comments itemId={item.id} comments={comments[item.id] || []} addComment={addComment} />
                         </Modal>
-                        <a href={`http://localhost:5000/download/${item.id}`} className="item-download-button">
-                            <FontAwesomeIcon icon={faDownload} />
+                        <a href={item.fileUrl} target="_blank" rel="noopener noreferrer">
+                            
                         </a>
+                        <button className="item-download-button" onClick={() => handleDownload(item.fileUrl)}><FontAwesomeIcon icon={faDownload} /></button>
                     </div>
                 ))}
             </div>
